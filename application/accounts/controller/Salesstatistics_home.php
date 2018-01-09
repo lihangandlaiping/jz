@@ -4,39 +4,34 @@
  * User: qls
  */
 namespace app\accounts\controller;
+
 use Home\HomeController;
 use My\MasterModel;
+use think\Request;
 
 class SalesstatisticsHome extends HomeController
 {
-    protected $model_name='sales_statistics';
+    protected $model_name = 'sales_statistics';
+
     function __construct()
     {
         parent::__construct();
         config('parent_temple', '');
     }
-     /**
-     * 数据列表 $_p 为分页数据
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|\think\response\View
-     */
-    function index()
-    {
-        $where=array();$field='*';$order='';$group='';$join=array();
-       $list= $this->getListData($this->model_name,$where,$field,$order,$group,$join);
-        $this->display('list',$list);
-        return view('index');
-    }
 
     /**
-     * 单条数据详情
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|\think\response\View
+     *
      */
-    function show()
+    function generateSalesStatistics()
     {
-        $where=array();$field='*';$order='';$group='';$join=array();
-        $info=MasterModel::inIt($this->model_name)->field($field)->getOne($where,$order,$group,$join);
-        $this->display('info',$info);
-        return view('details');
+        if(Request::instance()->isPost()){
+
+        }else{
+            $sales_record_list = MasterModel::inIt('sales_record s')->field('s.id,s.client_id,s.money_amount,s.sales_sn,c.name')->getListData(['s.member_id' => $this->member_info['id'], 's.status' => '1'], 's.id desc','',['client c','c.id=s.client_id','left']);
+            $purchase_history_list = MasterModel::inIt('purchase_history p')->field('p.id,p.wholesaler_id,p.unit_price,p.unit_amount,p.wholesaler_sn,p.total_price,w.name')->getListData(['member_id' => $this->member_info['id'], 'status' => '1'], 'id desc','',['wholesaler w','w.id=p.wholesaler_id','left']);
+            return view('generate_sales_statistics');
+        }
     }
+
 
 }

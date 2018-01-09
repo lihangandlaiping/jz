@@ -2,37 +2,7 @@
  * Created by Administrator on 2017/5/4.
  */
 (function(obj){
-    obj.alert=function(title,icon){//icon 1成功 2失败 3警告
-        var type=icon==1?'success':(icon==2?'error':(icon==3?'warning':'info'));
-        swal({
-            title: title,
-            text: "我将在2秒内关闭.",
-            timer: 2000,
-            type:type,
-            showConfirmButton: true
-        });
-    };
-    obj.confirm=function(str,succ,erro){
-        swal({
-                title: str,
-                text: "你的本次操作，将会影响数据内容。确定要继续执行吗？",
-                type: "info",
-                showCancelButton: true,
-                confirmButtonColor: "#206ca4",
-                confirmButtonText: "确认",
-                cancelButtonText: "取消",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function(isConfirm){
-                sweetAlert.close();
-                if (isConfirm) {
-                    if(succ!=null)succ();
-                } else {
-                    if(erro!=null)erro();
-                }
-            });
-    };
+
     obj.alert=function(tile)
     {
         swal({

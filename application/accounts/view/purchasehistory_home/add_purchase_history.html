@@ -1,0 +1,132 @@
+{include file="public/header" title="批发记录"  /}
+<body>
+<div class="container" id="container">
+    <div id="api">
+        <div class="page input js_show">
+            <div class="page__hd">
+                <h1 class="page__title">批发记录</h1>
+            </div>
+            <div class="page__bd" v-for="(info,key) in purchase_history_list" >
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">批发编号</label>
+                            <em class="weui-form-preview__value">{{info.wholesaler_sn}}</em>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="weui-cells__title">详情</div>
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell weui-cell_select weui-cell_select-after">
+                                <div class="weui-cell__hd">
+                                    <label  class="weui-label">批发商</label>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <select v-model="info.wholesaler_id" class="weui-select" name="select2">
+                                        <option v-for="wholesaler_info in wholesaler_list" v-bind:value="wholesaler_info.id">{{wholesaler_info.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label  class="weui-label">批发时间</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="date"   v-model="info.w_time">
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">单价</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="number" v-model="info.unit_price" pattern="[0-9.]*" placeholder="请输入批发单价">
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">总量</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="number" v-model="info.unit_amount" pattern="[0-9.]*" placeholder="请输入批发总数量">
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">总价</label></div>
+                                <div class="weui-cell__bd">
+                                    <span>¥{{info.total_price}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weui-cells__title">备注</div>
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell">
+                                <div class="weui-cell__bd">
+                                    <textarea class="weui-textarea"  v-model="info.remark" placeholder="请输入文本" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weui-form-preview__ft">
+                        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:" v-on:click="delSales(key)">删除</a>
+                        <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary"
+                                href="javascript:" v-on:click="creationNewSales()">添加
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" href="javascript:"  v-on:click="subForm()">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script >
+    var vueObj=new Vue({
+        el: '#api',
+        data: {
+            purchase_history_list: JSON.parse('{:json_encode($purchase_history_list)}'),
+            purchase_history_num: '{$purchase_history_num}',
+            member_id: '{$member_id}',
+            date_num: "{:date('Ymd')}",
+            wholesaler_list:JSON.parse('{:json_encode($wholesaler_list)}')
+        },
+        methods: {
+            format: function (timestamp) {
+                //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+                var date =  new Date(timestamp*1000);
+                var y = 1900+date.getYear();
+                var m = "0"+(date.getMonth()+1);
+                var d = "0"+date.getDate();
+                return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+            },
+            creationNewSales:function () {
+                var sales_record_info={};
+                this.purchase_history_num=(1*this.purchase_history_num)+1;
+                sales_record_info.wholesaler_sn=this.date_num+( "000" + this.member_id ).substr( -3 )+('000'+this.purchase_history_num).substr( -3 );
+                sales_record_info.wholesaler_id=this.wholesaler_list[0].id;
+                sales_record_info.unit_price='';
+                sales_record_info.status='1';
+                sales_record_info.w_time="{:date('Y/m/d')}";
+                this.purchase_history_list.push(sales_record_info);
+            },
+            subForm:function () {
+                ajaxPostSend('{:url()}',{'data':vueObj.purchase_history_list})
+            },
+            delSales:function (key) {
+                if(vueObj.purchase_history_list.length<2){
+                    qq_alert('至少保留一条零售信息');
+                    return false;
+                }
+                var key_id=vueObj.purchase_history_list[key].id;
+                if(key_id==undefined){
+                    vueObj.purchase_history_list.splice(key,1);
+                }else {
+                    ajaxPostSend('{:url(delSales)}',{'id':key_id},function (data) {
+                        if(data.code=='1'){
+                            vueObj.purchase_history_list.splice(key,1);
+                        }
+                    })
+                }
+            }
+        }
+    });
+
+</script>
+
+</body>

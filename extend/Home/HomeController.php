@@ -15,7 +15,7 @@ use wx_model\Weixinmodel;
 class HomeController extends MasterController
 {
     protected $model_name='';//数据库表名
-    protected $member_info='';
+    protected $member_info=['id'=>'1'];
     protected $wx_obj='';
     protected $wx_openid='';
     protected $wx_model='';

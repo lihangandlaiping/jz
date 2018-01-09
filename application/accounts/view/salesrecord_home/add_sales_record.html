@@ -1,227 +1,123 @@
-{include file="public/header" title="添加批发信息" /}
-aa
-<div class="page">
-    <div class="page__hd">
-        <h1 class="page__title">Input</h1>
-        <p class="page__desc">表单输入</p>
-    </div>
-    <div class="page__bd">
-        <div class="weui-cells__title">单选列表项</div>
-        <div class="weui-cells weui-cells_radio">
-            <label class="weui-cell weui-check__label" for="x11">
-                <div class="weui-cell__bd">
-                    <p>cell standard</p>
-                </div>
-                <div class="weui-cell__ft">
-                    <input type="radio" class="weui-check" name="radio1" id="x11"/>
-                    <span class="weui-icon-checked"></span>
-                </div>
-            </label>
-            <label class="weui-cell weui-check__label" for="x12">
-
-                <div class="weui-cell__bd">
-                    <p>cell standard</p>
-                </div>
-                <div class="weui-cell__ft">
-                    <input type="radio" name="radio1" class="weui-check" id="x12" checked="checked"/>
-                    <span class="weui-icon-checked"></span>
-                </div>
-            </label>
-            <a href="javascript:void(0);" class="weui-cell weui-cell_link">
-                <div class="weui-cell__bd">添加更多</div>
-            </a>
+{include file="public/header" title="零售记录"  /}
+<body>
+<div class="container" id="container">
+    <div id="aa">
+    <div class="page input js_show">
+        <div class="page__hd">
+            <h1 class="page__title">零售记录</h1>
         </div>
-        <div class="weui-cells__title">复选列表项</div>
-        <div class="weui-cells weui-cells_checkbox">
-            <label class="weui-cell weui-check__label" for="s11">
-                <div class="weui-cell__hd">
-                    <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked"/>
-                    <i class="weui-icon-checked"></i>
+        <div class="page__bd" v-for="info in sales_record_list" >
+            <div class="weui-form-preview">
+                <div class="weui-form-preview__hd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发编号</label>
+                        <em class="weui-form-preview__value">{{info.sales_sn}}</em>
+                    </div>
                 </div>
-                <div class="weui-cell__bd">
-                    <p>standard is dealt for u.</p>
+                <div class="">
+                    <div class="weui-cells__title">详情</div>
+                    <div class="weui-cells weui-cells_form">
+                        <div class="weui-cell weui-cell_select weui-cell_select-after">
+                            <div class="weui-cell__hd">
+                                <label  class="weui-label">零售客户</label>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <select v-model="info.client_id" class="weui-select" name="select2">
+                                    <option v-for="client_info in client_list" v-bind:value="client_info.id">{{client_info.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd"><label class="weui-label">零售金额</label></div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input" type="number" v-model="info.money_amount" pattern="[0-9.]*" placeholder="请输零售金额">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-cell weui-cell_select weui-cell_select-after">
+                        <div class="weui-cell__hd">
+                            <label  class="weui-label">收款状态</label>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <select v-model="info.status" class="weui-select" name="select2">
+                                <option value="1">已收</option>
+                                <option value="2">欠款</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="weui-cells__title">备注</div>
+                    <div class="weui-cells weui-cells_form">
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <textarea class="weui-textarea"  v-model="info.remark" placeholder="零售备注" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </label>
-            <label class="weui-cell weui-check__label" for="s12">
-                <div class="weui-cell__hd">
-                    <input type="checkbox" name="checkbox1" class="weui-check" id="s12"/>
-                    <i class="weui-icon-checked"></i>
-                </div>
-                <div class="weui-cell__bd">
-                    <p>standard is dealicient for u.</p>
-                </div>
-            </label>
-            <a href="javascript:void(0);" class="weui-cell weui-cell_link">
-                <div class="weui-cell__bd">添加更多</div>
-            </a>
-        </div>
 
-        <div class="weui-cells__title">表单</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">qq</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入qq号"/>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd">
-                    <label class="weui-label">手机号</label>
-                </div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="tel" placeholder="请输入手机号"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <button class="weui-vcode-btn">获取验证码</button>
-                </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="date" value=""/>
-                </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label for="" class="weui-label">时间</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="datetime-local" value="" placeholder=""/>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" placeholder="请输入验证码"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <img class="weui-vcode-img" src="./images/vcode.jpg" />
+                <div class="weui-form-preview__ft">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:" v-on:click="delSales()">删除</a>
+                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary"
+                            href="javascript:" v-on:click="creationNewSales()">添加
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="weui-cells__tips">底部说明文字底部说明文字</div>
-
-        <div class="weui-cells__title">表单报错</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell weui-cell_warn">
-                <div class="weui-cell__hd"><label for="" class="weui-label">卡号</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入卡号"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <i class="weui-icon-warn"></i>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="weui-cells__title">开关</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell weui-cell_switch">
-                <div class="weui-cell__bd">标题文字</div>
-                <div class="weui-cell__ft">
-                    <input class="weui-switch" type="checkbox"/>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_switch">
-                <div class="weui-cell__bd">兼容IE Edge的版本</div>
-                <div class="weui-cell__ft">
-                    <label for="switchCP" class="weui-switch-cp">
-                        <input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked"/>
-                        <div class="weui-switch-cp__box"></div>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="weui-cells__title">文本框</div>
-        <div class="weui-cells">
-            <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请输入文本"/>
-                </div>
-            </div>
-        </div>
-
-        <div class="weui-cells__title">文本域</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
-                    <div class="weui-textarea-counter"><span>0</span>/200</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="weui-cells__title">选择</div>
-        <div class="weui-cells">
-
-            <div class="weui-cell weui-cell_select weui-cell_select-before">
-                <div class="weui-cell__hd">
-                    <select class="weui-select" name="select2">
-                        <option value="1">+86</option>
-                        <option value="2">+80</option>
-                        <option value="3">+84</option>
-                        <option value="4">+87</option>
-                    </select>
-                </div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入号码"/>
-                </div>
-            </div>
-        </div>
-        <div class="weui-cells__title">选择</div>
-        <div class="weui-cells">
-            <div class="weui-cell weui-cell_select">
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="select1">
-                        <option selected="" value="1">微信号</option>
-                        <option value="2">QQ号</option>
-                        <option value="3">Email</option>
-                    </select>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">国家/地区</label>
-                </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="select2">
-                        <option value="1">中国</option>
-                        <option value="2">美国</option>
-                        <option value="3">英国</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <label for="weuiAgree" class="weui-agree">
-            <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox"/>
-            <span class="weui-agree__text">
-                阅读并同意<a href="javascript:void(0);">《相关条款》</a>
-            </span>
-        </label>
-
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+            <a class="weui-btn weui-btn_primary" href="javascript:" v-on:click="subForm()" >确定</a>
         </div>
-    </div>
-    <div class="page__ft">
-        <a href="javascript:home()"><img src="./images/icon_footer_link.png" /></a>
     </div>
 </div>
-<script type="text/javascript">
-    $(function(){
-        var $tooltips = $('.js_tooltips');
-
-        $('#showTooltips').on('click', function(){
-            if ($tooltips.css('display') != 'none') return;
-
-            // toptips的fixed, 如果有`animation`, `position: fixed`不生效
-            $('.page.cell').removeClass('slideIn');
-
-            $tooltips.css('display', 'block');
-            setTimeout(function () {
-                $tooltips.css('display', 'none');
-            }, 2000);
-        });
+</div>
+<script >
+    var vueObj=new Vue({
+        el: '#aa',
+        data: {
+            sales_record_list:JSON.parse('{:json_encode($sales_record_list)}'),
+            sales_record_num: '{$sales_record_num}',
+            member_id: '{$member_id}',
+            date_num: "{:date('Ymd')}",
+            client_list:JSON.parse('{:json_encode($client_list)}')
+        },
+        methods: {
+            format: function (timestamp) {
+                //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+                var date =  new Date(timestamp*1000);
+                var y = 1900+date.getYear();
+                var m = "0"+(date.getMonth()+1);
+                var d = "0"+date.getDate();
+                return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+            },
+            creationNewSales:function () {
+                var sales_record_info={};
+                this.sales_record_num=(1*this.sales_record_num)+1;
+                sales_record_info.sales_sn=this.date_num+( "000" + this.member_id ).substr( -3 )+('000'+this.sales_record_num).substr( -3 );
+                sales_record_info.client_id=this.client_list[0].id;
+                sales_record_info.status='1';
+                this.sales_record_list.push(sales_record_info);
+            },
+            subForm:function () {
+                ajaxPostSend('{:url()}',{'data':vueObj.sales_record_list})
+            },
+            delSales:function (key) {
+                if(vueObj.sales_record_list.length<2){
+                    qq_alert('至少保留一条零售信息');
+                    return false;
+                }
+                var key_id=vueObj.sales_record_list[key].id;
+                if(key_id==undefined){
+                    vueObj.sales_record_list.splice(key,1);
+                }else {
+                    ajaxPostSend('{:url(delSales)}',{'id':key_id},function (data) {
+                        if(data.code=='1'){
+                            vueObj.sales_record_list.splice(key,1);
+                        }
+                    })
+                }
+            }
+        }
     });
+
 </script>
+
+</body>
