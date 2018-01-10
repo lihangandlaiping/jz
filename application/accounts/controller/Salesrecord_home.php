@@ -19,6 +19,10 @@ class SalesrecordHome extends HomeController
         config('parent_temple', '');
     }
 
+    /**
+     * 添加零售数据
+     * @return \think\response\View|void
+     */
     function addSalesRecord()
     {
         if (Request::instance()->isPost()) {
@@ -62,6 +66,24 @@ class SalesrecordHome extends HomeController
             $this->error('删除失败');
         } else {
             $this->success('删除成功', url('addSalesRecord'));
+        }
+    }
+
+    /**
+     * 获取欠款数据
+     * @return \think\response\View
+     */
+    function confirmReceipt(){
+        $client_id=input('client_id','0');
+        $where=['s.status'=>'2','s.statistics_id'=>['<>',''],'s.member_id'=>$this->member_info['id']];
+        if($client_id)$where['s.client_id']=$client_id;
+        $list=MasterModel::inIt('sales_record s')->field('s.id,s.money_amount,s.record_time,s.sales_sn,s.remark,c.name')->getListData($where,'s.id desc','',[['client c','c.id=s.client_id','left']]);
+        if(Request::instance()->isAjax()){
+            $this->success('获取数成功','',['list'=>$list]);
+        }else{
+            $client_list=MasterModel::inIt('client')->field('id,name')->getListData(['member_id'=>$this->member_info['id']]);
+            $client_list[0]='全部客户';
+            return view('confirm_receipt',['list'=>$list,'client_list'=>$client_list,'client_id'=>$client_id]);
         }
     }
 

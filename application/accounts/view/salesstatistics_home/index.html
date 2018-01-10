@@ -3,121 +3,58 @@
     <div class="page__bd" style="height: 100%;">
         <div class="weui-tab">
             <div class="weui-navbar">
-                <div class="weui-navbar__item weui-bar__item_on">
+                <div class="weui-navbar__item {$type=='1'?'weui-bar__item_on':''}" data-type="1">
                     日统计
                 </div>
-                <div class="weui-navbar__item">
+                <div class="weui-navbar__item {$type=='2'?'weui-bar__item_on':''}" data-type="2">
                     月统计
                 </div>
-                <div class="weui-navbar__item">
+                <div class="weui-navbar__item {$type=='3'?'weui-bar__item_on':''}" data-type="3">
                     年统计
                 </div>
             </div>
-            <div class="weui-tab__panel" >
+            <div class="weui-tab__panel" id="api">
                 <div class="page preview js_show">
                     <div class="page__hd" style="margin-top: 50px;">
-                        <h1 class="page__title">Preview</h1>
+                        <h1 class="page__title">首页</h1>
                     </div>
                     <div class="page__bd">
-                        <div class="weui-form-preview">
-                            <div class="weui-form-preview__hd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">付款金额</label>
-                                    <em class="weui-form-preview__value">¥2400.00</em>
+                        <div v-for="statistics_info in statistics_list">
+                            <div class="weui-form-preview">
+                                <div class="weui-form-preview__hd">
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">{{format(statistics_info.date_time)}}</label>
+                                        <em class="weui-form-preview__value">利润:¥{{statistics_info.retail_money-statistics_info.wholesale_money-statistics_info.residue_money}}</em>
+                                    </div>
+                                </div>
+                                <div class="weui-form-preview__bd">
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">批发总价</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.wholesale_money}}</span>
+                                    </div>
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">零售总价</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.retail_money}}</span>
+                                    </div>
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">毛利润</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.retail_money-statistics_info.wholesale_money}}</span>
+                                    </div>
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">欠款总金额</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.debt_money}}</span>
+                                    </div>
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">回款总金额</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.returned_money}}</span>
+                                    </div>
+                                    <div class="weui-form-preview__item">
+                                        <label class="weui-form-preview__label">剩余欠款</label>
+                                        <span class="weui-form-preview__value">¥{{statistics_info.residue_money}}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="weui-form-preview__bd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">商品</label>
-                                    <span class="weui-form-preview__value">电动打蛋机</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">名字名字名字</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                                </div>
-                            </div>
-                            <div class="weui-form-preview__ft">
-                                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</a>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="weui-form-preview">
-                            <div class="weui-form-preview__hd">
-                                <label class="weui-form-preview__label">付款金额</label>
-                                <em class="weui-form-preview__value">¥2400.00</em>
-                            </div>
-                            <div class="weui-form-preview__bd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">商品</label>
-                                    <span class="weui-form-preview__value">电动打蛋机</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">名字名字名字</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                                </div>
-                            </div>
-                            <div class="weui-form-preview__ft">
-                                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">辅助操作</a>
-                                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="weui-form-preview">
-                            <div class="weui-form-preview__hd">
-                                <label class="weui-form-preview__label">付款金额</label>
-                                <em class="weui-form-preview__value">¥2400.00</em>
-                            </div>
-                            <div class="weui-form-preview__bd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">商品</label>
-                                    <span class="weui-form-preview__value">电动打蛋机</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">名字名字名字</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                                </div>
-                            </div>
-                            <div class="weui-form-preview__ft">
-                                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">辅助操作</a>
-                                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</button>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="weui-form-preview">
-                            <div class="weui-form-preview__hd">
-                                <label class="weui-form-preview__label">付款金额</label>
-                                <em class="weui-form-preview__value">¥2400.00</em>
-                            </div>
-                            <div class="weui-form-preview__bd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">商品</label>
-                                    <span class="weui-form-preview__value">电动打蛋机</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">名字名字名字</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">标题标题</label>
-                                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</span>
-                                </div>
-                            </div>
-                            <div class="weui-form-preview__ft">
-                                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">辅助操作</a>
-                                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</button>
-                            </div>
+                            <br>
                         </div>
                     </div>
 
@@ -127,3 +64,39 @@
     </div>
 </div>
 {include file="public/footer" /}
+
+<script>
+    var is_ajax = 1;
+    var statistics_count_num = '0';
+    var type = '{$type}';
+    var vueObj = new Vue({
+        el: '#api',
+        data: {
+            statistics_list: JSON.parse('{:json_encode($statistics_list)}')
+        },
+        created: function () {
+
+        },
+        methods: {
+            format: function (timestamp) {
+                //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+                var date = new Date(timestamp * 1000);
+                var y = 1900 + date.getYear();
+                var m = "0" + (date.getMonth() + 1);
+                var d = "0" + date.getDate();
+                if (type == 1) {
+                    return y + "-" + m.substring(m.length - 2, m.length) + "-" + d.substring(d.length - 2, d.length);
+                } else if (type == 2) {
+                    return y + "-" + m.substring(m.length - 2, m.length) + "月";
+                } else {
+                    return y + '年';
+                }
+            }
+        }
+    });
+
+    $('.weui-navbar__item').click(function () {
+        var data_type = $(this).attr('data-type');
+        location.href = '{:url()}?type=' + data_type;
+    });
+</script>

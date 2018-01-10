@@ -65,8 +65,23 @@ class SalesstatisticsHome extends HomeController
      */
     function index(){
         $type=input('type','1');
-        $statistics_list=MasterModel::inIt('sales_statistics')->getListData(['member_id'=>$this->member_info['id']]);
-        return view('index',['statistics_list'=>$statistics_list,'type'=>$type]);
+        $page=input('page','0');
+        $limit=($page*20).',20';
+        $group='';
+        $field='date_time,wholesale_money,retail_money,debt_money,returned_money,residue_money';
+        if($type=='2'){
+            $field='date_time,SUM(wholesale_money) wholesale_money,SUM(retail_money) retail_money,SUM(debt_money) debt_money,SUM(returned_money) returned_money,SUM(residue_money) residue_money';
+            $group='month_num';
+        }elseif($type=='3'){
+            $field='date_time,SUM(wholesale_money) wholesale_money,SUM(retail_money) retail_money,SUM(debt_money) debt_money,SUM(returned_money) returned_money,SUM(residue_money) residue_money';
+            $group='years_num';
+        }
+        $statistics_list=MasterModel::inIt('sales_statistics')->field($field)->getListData(['member_id'=>$this->member_info['id']],'id desc',$group,[],$limit);
+        if(Request::instance()->isAjax()){
+            $this->success('获取数据成功','',['list'=>$statistics_list]);
+        }else{
+            return view('index',['statistics_list'=>$statistics_list,'type'=>$type]);
+        }
     }
 
 }

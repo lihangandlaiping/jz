@@ -1,0 +1,85 @@
+{include file="public/header" title="零售回款"  /}
+<div id="api">
+    <div class="page preview js_show">
+        <div class="page__hd">
+            <h1 class="page__title">零售回款</h1>
+            <p class="page__desc">请选择回款零售</p>
+        </div>
+        <div class="page__bd">
+            <div v-for="(statistics_info,key) in statistics_list">
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">{{statistics_info.name}}</label>
+                            <em class="weui-form-preview__value">¥{{statistics_info.money_amount}}</em>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">时间</label>
+                            <span class="weui-form-preview__value">{{format(statistics_info.record_time)}}</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">是否统计</label>
+                            <div class="weui-cell__ft">
+                                <input class="weui-switch" type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__ft">
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">确认收款</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    <!--弹框-->
+    <div id="dialogs">
+        <!--BEGIN dialog1-->
+        <div class="js_dialog" id="iosDialog1" style="opacity: 1;display: none">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div class="weui-dialog__hd"><strong class="weui-dialog__title">请确认回款金额</strong></div>
+                <div class="weui-dialog__bd">弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+                </div>
+            </div>
+        </div>
+        <!--END dialog1-->
+    </div>
+</div>
+
+{include file="public/footer" /}
+<script>
+    var vueObj = new Vue({
+        el: '#api',
+        data: {
+            statistics_list: JSON.parse('{:json_encode($list)}')
+        },
+        created: function () {
+
+        },
+        methods: {
+            format: function (timestamp) {
+                //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+                var date = new Date(timestamp * 1000);
+                var y = 1900 + date.getYear();
+                var m = "0" + (date.getMonth() + 1);
+                var d = "0" + date.getDate();
+                return y + "-" + m.substring(m.length - 2, m.length) + "-" + d.substring(d.length - 2, d.length);
+            }
+        }
+    });
+    $(function () {
+        var iosDialog1 = $('#iosDialog1');
+        $('#dialogs').on('click', '.weui-dialog__btn', function () {
+            $(this).parents('.js_dialog').fadeOut(200);
+        });
+        $('#showIOSDialog1').on('click', function () {
+            iosDialog1.fadeIn(200);
+        });
+    });
+</script>
