@@ -1,0 +1,191 @@
+{include file="public/header" title="销售统计生成"  /}
+<div class="page preview js_show" id="api">
+    <div class="page__hd">
+        <h1 class="page__title">销售统计生成</h1>
+    </div>
+    <div class="page__bd">
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">批发总价</label>
+                    <em class="weui-form-preview__value">{{purchase_history_money?'¥'+purchase_history_money:'¥0.00'}}</em>
+                </div>
+            </div>
+            <div v-for="(purchase_info , purchase_key) in purchase_history_list">
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发数量</label>
+                        <span class="weui-form-preview__value">{{purchase_info.unit_amount}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发金额</label>
+                        <span class="weui-form-preview__value">{{purchase_info.unit_price}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发价格</label>
+                        <span class="weui-form-preview__value">{{purchase_info.total_price}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">是否统计</label>
+                        <div class="weui-cell__ft" v-on:click="setPurchaseHistoryId(purchase_info.id,purchase_key)">
+                            <input class="weui-switch" type="checkbox" v-model="purchase_info.is_del" true-value="2"  false-value="1" >
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form-preview__ft">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">零售总价</label>
+                    <em class="weui-form-preview__value">{{sales_record_money?'¥'+sales_record_money:'¥0.00'}}</em>
+                </div>
+            </div>
+            <div v-for="(sales_info,sales_key) in sales_record_list">
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">零售金额</label>
+                        <span class="weui-form-preview__value">{{sales_info.money_amount}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">是否收款</label>
+                        <span class="weui-form-preview__value">{{(sales_info.status=='1')?'是':'否'}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">是否统计</label>
+                        <div class="weui-cell__ft" v-on:click="setSalesRecordId(sales_info.id,sales_key)">
+                            <input class="weui-switch" type="checkbox" v-model="sales_info.is_del" true-value="2"  false-value="1"  >
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form-preview__ft">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">销售统计</label>
+                    <em class="weui-form-preview__value"></em>
+                </div>
+            </div>
+            <div >
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发成本</label>
+                        <span class="weui-form-preview__value">{{purchase_history_money?'¥'+purchase_history_money:'¥0.00'}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">零售总价</label>
+                        <span class="weui-form-preview__value">{{sales_record_money?'¥'+sales_record_money:'¥0.00'}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">总利润</label>
+                        <span class="weui-form-preview__value">{{'¥'+(sales_record_money-purchase_history_money).toFixed(2)}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">实际利润</label>
+                        <span class="weui-form-preview__value">{{'¥'+(sales_record_money-purchase_history_money-arrears).toFixed(2)}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">总欠款</label>
+                        <span class="weui-form-preview__value">{{arrears?'¥'+arrears:'¥0.00'}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">批发时间</label>
+                        <span class="weui-form-preview__value"> <input class="weui-input" type="date"  v-model="date_num"  ></span>
+                    </div>
+                </div>
+                <div class="weui-form-preview__ft">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" href="javascript:" v-on:click="subForm()">确定</a>
+    </div>
+
+</div>
+<script>
+    var vueObj = new Vue({
+        el: '#api',
+        data: {
+            sales_record_list: JSON.parse('{:json_encode($sales_record_list)}'),
+            purchase_history_list: JSON.parse('{:json_encode($purchase_history_list)}'),
+            sales_record_money: '0',
+            purchase_history_money: '0',
+            sales_record_id:[],
+            purchase_history_id:[],
+            arrears:'0.00',
+            date_num: "{:date('Y-m-d')}"
+        },
+        created: function () {
+            this.computeSalesRecordMoney();
+            this.computePurchaseHistoryMoney();
+        },
+        methods: {
+            format: function (timestamp) {
+                //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+                var date = new Date(timestamp * 1000);
+                var y = 1900 + date.getYear();
+                var m = "0" + (date.getMonth() + 1);
+                var d = "0" + date.getDate();
+                return y + "-" + m.substring(m.length - 2, m.length) + "-" + d.substring(d.length - 2, d.length);
+            },
+            computeSalesRecordMoney: function () {
+                var sales_length = this.sales_record_list.length;
+                this.sales_record_money=0;
+                this.arrears=0;
+                for (var i = 0; i < sales_length; ++i) {
+                    if (this.sales_record_list[i].is_del == '2') {
+                        this.sales_record_money = ((this.sales_record_money * 1) + (this.sales_record_list[i].money_amount * 1)).toFixed(2);
+                        if(this.sales_record_list[i].status=='2'){
+                            this.arrears = ((this.arrears * 1) + (this.sales_record_list[i].money_amount * 1)).toFixed(2);
+                        }
+                    }
+                }
+            },
+            computePurchaseHistoryMoney: function () {
+                var sales_length = this.purchase_history_list.length;
+                this.purchase_history_money ='0';
+                for (var i = 0; i < sales_length; ++i) {
+                    if (this.purchase_history_list[i].is_del == '2') {
+                        this.purchase_history_money = ((this.purchase_history_money * 1) + (this.purchase_history_list[i].total_price * 1)).toFixed(2);
+                    }
+                }
+            },
+            setSalesRecordId:function (sales_id,key) {
+                var length=this.sales_record_id.length;
+                var sales_key=$.inArray(sales_id,this.sales_record_id);
+                if(sales_key<0){
+                    this.sales_record_list[key].is_del=1;
+                    this.sales_record_id[length]=sales_id;
+                }else {
+                    this.sales_record_list[key].is_del=2;
+                    this.sales_record_id.splice(sales_key,1);
+                }
+                this.computeSalesRecordMoney();
+            },
+            setPurchaseHistoryId:function (purchase_id,key) {
+                var length=this.purchase_history_id.length;
+                var purchase_key=$.inArray(purchase_id,this.purchase_history_id);
+                if(purchase_key<0){
+                    this.purchase_history_list[key].is_del=1;
+                    this.purchase_history_id[length]=purchase_id;
+                }else {
+                    this.purchase_history_list[key].is_del=2;
+                    this.purchase_history_id.splice(purchase_key,1);
+                }
+                this.computePurchaseHistoryMoney();
+            },
+            subForm:function () {
+                ajaxPostSend('{:url()}',{'date_num':vueObj.date_num,'sales_record_id':vueObj.sales_record_id,'purchase_history_id':vueObj.purchase_history_id})
+            }
+        }
+    });
+
+</script>

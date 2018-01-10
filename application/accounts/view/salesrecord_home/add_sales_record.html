@@ -6,7 +6,8 @@
         <div class="page__hd">
             <h1 class="page__title">零售记录</h1>
         </div>
-        <div class="page__bd" v-for="info in sales_record_list" >
+        <div  v-for="info in sales_record_list" >
+        <div class="page__bd"  >
             <div class="weui-form-preview">
                 <div class="weui-form-preview__hd">
                     <div class="weui-form-preview__item">
@@ -63,6 +64,8 @@
                 </div>
             </div>
         </div>
+        <br>
+    </div>
         <div class="weui-btn-area">
             <a class="weui-btn weui-btn_primary" href="javascript:" v-on:click="subForm()" >确定</a>
         </div>

@@ -48,7 +48,7 @@ class PurchasehistoryHome extends HomeController
             $wholesaler_list = MasterModel::inIt('wholesaler')->field('id,name')->getListData(['member_id' => $this->member_info['id']], 'id desc');
             if (empty($wholesaler_list)) return $this->error('请添加批发商信息');
             if (empty($purchase_history_list)) {
-                $purchase_history_list = [['wholesaler_sn' => date('Ymd') . sprintf("%0{$this->member_info['id']}s", 3) . '001', 'w_time' => date('Y/m/d'), 'wholesaler_id' => $wholesaler_list[0]['id'], 'unit_price' => '']];
+                $purchase_history_list = [['wholesaler_sn' => date('Ymd') . sprintf("%0{$this->member_info['id']}s", 3) . '001', 'w_time' => date('Y-m-d'), 'wholesaler_id' => $wholesaler_list[0]['id'], 'unit_price' => '']];
                 $purchase_history_num = 1;
             }
             return view('add_purchase_history', ['purchase_history_list' => $purchase_history_list, 'purchase_history_num' => $purchase_history_num, 'wholesaler_list' => $wholesaler_list, 'member_id' => $this->member_info['id']]);
@@ -61,7 +61,7 @@ class PurchasehistoryHome extends HomeController
     function delSales(){
         $id=input('id','');
         if(empty($id))$this->error('缺少必要参数');
-        $ret= MasterModel::inIt('purchase_history')->updateData(['status'=>'3'],['id'=>$id,'member_id'=>$this->member_info['id']]);
+        $ret= MasterModel::inIt('purchase_history')->updateData(['status'=>'3','is_del'=>'2'],['id'=>$id,'member_id'=>$this->member_info['id']]);
         if($ret===false){
             $this->error('删除失败');
         }else{

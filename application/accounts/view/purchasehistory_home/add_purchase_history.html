@@ -6,7 +6,8 @@
             <div class="page__hd">
                 <h1 class="page__title">批发记录</h1>
             </div>
-            <div class="page__bd" v-for="(info,key) in purchase_history_list" >
+            <div v-for="(info,key) in purchase_history_list">
+            <div class="page__bd"  >
                 <div class="weui-form-preview">
                     <div class="weui-form-preview__hd">
                         <div class="weui-form-preview__item">
@@ -30,7 +31,7 @@
                             <div class="weui-cell">
                                 <div class="weui-cell__hd"><label  class="weui-label">批发时间</label></div>
                                 <div class="weui-cell__bd">
-                                    <input class="weui-input" type="date"   v-model="info.w_time">
+                                    <input class="weui-input" type="date"   v-model="format(info.w_time)">
                                 </div>
                             </div>
                             <div class="weui-cell">
@@ -48,7 +49,7 @@
                             <div class="weui-cell">
                                 <div class="weui-cell__hd"><label class="weui-label">总价</label></div>
                                 <div class="weui-cell__bd">
-                                    <span>¥{{info.total_price}}</span>
+                                    <span>{{info.total_price?'¥'+info.total_price:''}}</span>
                                 </div>
                             </div>
                         </div>
@@ -69,6 +70,8 @@
                         </button>
                     </div>
                 </div>
+            </div>
+                <br>
             </div>
             <div class="weui-btn-area">
                 <a class="weui-btn weui-btn_primary" href="javascript:"  v-on:click="subForm()">确定</a>
